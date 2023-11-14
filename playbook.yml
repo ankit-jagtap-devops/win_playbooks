@@ -1,0 +1,29 @@
+---
+- name: Install OpenJDK on Windows
+  gather_facts: false
+  hosts: localhost
+  become: true
+  vars:
+    ansible_shell_type: powershell
+    ansible_shell_executable: powershell.exe
+  tasks:
+    - name: Download and extract OpenJDK
+      win_get_url:
+        url: https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.13_windows-x64_bin.zip
+        dest: C:\\Temp\\openjdk.zip
+    - name: Create installation directory
+      win_file:
+        path: C:\\Program Files\\Java
+        state: directory
+    - name: Unzip OpenJDK
+      win_unzip:
+        src: C:\\Temp\\openjdk.zip
+        dest: C:\\Program Files\\Java
+        creates_path: yes
+    - name: Set JAVA_HOME environment variable
+      ansible.builtin.win_environment:
+        name: JAVA_HOME
+        value: C:\\Program Files\\Java\\jdk-11.0.13
+    - name: Add JAVA_HOME to PATH
+      ansible.builtin.win_path:
+        elements:
