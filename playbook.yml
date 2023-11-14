@@ -1,8 +1,8 @@
 ---
 - name: Install OpenJDK on Windows
   gather_facts: false
-  hosts: localhost
-  become: true
+  hosts: windows
+  become: false
   vars:
     ansible_shell_type: powershell
     ansible_shell_executable: powershell.exe
